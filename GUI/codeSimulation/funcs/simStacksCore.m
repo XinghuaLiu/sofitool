@@ -171,12 +171,12 @@ Tbl=cumsum(Ton) + Tbl*log(rand); % the bleaching state is another state as
 % that contributes to approach the bleaching state. Tbl follows the same
 % distribution as the other two states (hence the log).
 n=find(Tbl > 0); % did Ton reached Tbl ? 
-if any(n)
-   Ton(n(2:end))=0; % the fluorophore is bleached (no Ton left in the signal)
-   n=n(1);
-   Ton(n)=Ton(n) - Tbl(n);
-   times(2*n)=times(2*n) - Tbl(n); % the last "times" is put to 0
-end
+% if any(n)
+%    Ton(n(2:end))=0; % the fluorophore is bleached (no Ton left in the signal)
+%    n=n(1);
+%    Ton(n)=Ton(n) - Tbl(n);
+%    times(2*n)=times(2*n) - Tbl(n); % the last "times" is put to 0
+% end
 photons=[zeros(size(Ton));Ion*Ton];clear Ion; clear Ton; clear Tbl;
 photons=cumsum(photons(:)); % one point over two has no photons, this is 
 % the period in the off state. All others have photons for successive
