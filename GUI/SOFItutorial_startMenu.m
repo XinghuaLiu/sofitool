@@ -934,11 +934,8 @@ elseif strcmp(val{1},'siemens star')
     enableDisableEditBoxes(handles,'on',false);
     
 elseif strcmp(val{1},'user defined')
-    [pattern,Fluo.emitters,nPulses,dPulses,L] = emitterGenRandom(def,type,Grid,Cam,Optics,'user defined');
-    Grid.sy=L; Grid.sx=L;clear L;
+    [pattern,Fluo.emitters,nPulses,dPulses] = emitterGenRandom(def,type,Grid,Cam,Optics,'user defined');
     enableDisableEditBoxes(handles,'on',false);
-    set(handles.startMenu_pixelsY_edit,'String',num2str(Grid.sx));set(handles.startMenu_pixelsY_edit,'Enable','off');
-    set(handles.startMenu_pixelsX_edit,'String',num2str(Grid.sy));set(handles.startMenu_pixelsX_edit,'Enable','off');
     %updateParam(handles,handles.startMenu_pixelsY_edit,'sx','Grid',hMainGui,1);
 
 else

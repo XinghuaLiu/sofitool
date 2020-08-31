@@ -75,11 +75,14 @@ fig = statusbar('Diffraction...',fig);
 for m=1:Nemitters
     fig = statusbar(m/Nemitters,fig);
     % Discrete Grid
-    [x,y]=ind2sub(size(grid),find((gridY - emitter_position(m,1)).^2 + (gridX - emitter_position(m,2)).^2 <=  r^2 == 1));
+    [x,y]=ind2sub(size(grid),find((gridY - emitter_position(m,1)).^2 +...
+        (gridX - emitter_position(m,2)).^2 <=  r^2 == 1));
     for k=1:length(x)
         grid(x(k),y(k),:)= squeeze(grid(x(k),y(k),:)).' + 0.25*emitter_brightness(m,:)*...
-                         (erf((x(k)-emitter_position(m,1)+0.5)/(sqrt(2)*s_xy)) - erf((x(k)-emitter_position(m,1)-0.5)/(sqrt(2)*s_xy))).*...
-                         (erf((y(k)-emitter_position(m,2)+0.5)/(sqrt(2)*s_xy)) - erf((y(k)-emitter_position(m,2)-0.5)/(sqrt(2)*s_xy)));
+                         (erf((x(k)-emitter_position(m,1)+0.5)/(sqrt(2)*s_xy)) -...
+                     erf((x(k)-emitter_position(m,1)-0.5)/(sqrt(2)*s_xy))).*...
+                         (erf((y(k)-emitter_position(m,2)+0.5)/(sqrt(2)*s_xy)) -...
+                         erf((y(k)-emitter_position(m,2)-0.5)/(sqrt(2)*s_xy)));
     end
     clear x y;
     
@@ -110,14 +113,14 @@ if intensity_peak_mode
     grid = weight.*grid;clear weight;
 end
 
-% add poisson noise
+%% ADD POISSON noise
 fig = statusbar('Poisson Noise...',fig);
 for frame = 1:frames
     fig = statusbar(frame/frames,fig);
     grid(:,:,frame) = imnoise(uint16(max(0,grid(:,:,frame)-Fluo.background)+Fluo.background),'poisson');
 end
 delete(fig);
-
+%%
 % rescale intensity after adding poissonian noise
 if intensity_peak_mode
     Imax = max(max(mean(grid,3)));
@@ -156,11 +159,12 @@ while times(end) < frames
    times=[times;cumsum(cycles(:))];
 end
 
-times=times.';
+times=times.'; %transpose of the time matrix
 % times contains successively periods of activation and periods of off
 % (hence the blinking) both described by a normal distribution. Since Toff
 % > Ton, then the fluorophore is longer in the off state.
 
+% Even element minus odd number
 Ton=times(2:2:end) - times(1:2:end); % times(2,:) when size(times) was 2x60 (line 46)
 Tbl=cumsum(Ton) + Tbl*log(rand); % the bleaching state is another state as 
 % Ton and Toff. Here we cumulate only the times of Ton since it is the one

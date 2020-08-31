@@ -47,16 +47,18 @@ stacks =struct;
 
 % Generating Diffraction-Limited and Noisy Brightness Profiles
 [grid,stacks.analog]=simStacksCore(frames,Optics,Cam,Fluo,Grid,intensity_peak_mode,tutorial);
-
+%% ADD THERMAL NOISE and READOUT NOISE
 % Discretization: photoelectron conversion, electron multiplication,
 % readout and thermal noise
 fig = statusbar('Discretization...');
 for frame = 1:frames
-    stacks.discrete(:,:,frame) = uint16(gamrnd(grid(:,:,frame),Cam.quantum_gain) + Cam.readout_noise*(randn(Grid.sy,Grid.sx)) + Cam.thermal_noise*randn(Grid.sy,Grid.sx));
+    stacks.discrete(:,:,frame) = uint16(gamrnd(grid(:,:,frame),Cam.quantum_gain) ...
+        + Cam.readout_noise*(randn(Grid.sy,Grid.sx))...
+        + Cam.thermal_noise*randn(Grid.sy,Grid.sx));
     fig = statusbar(frame/frames,fig);
 end
 delete(fig);clear grid;
-
+%% 
 % compute peak Signal to Noise Ratio and Mean Square Error: need to change simStacksCore-->
 % uncomment line: GridblckSize = 1 at the beginning.
 % psnr_dB=0;mse=0;maxana=max(stacks.analog(:)); maxdig = max(stacks.discrete(:));

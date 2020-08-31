@@ -15,22 +15,22 @@ function [pattern,emitters_position] = emitterGen(def,type,Grid,Cam,Optics,shift
 %   Output:
 %       pattern = output image with nPulses placed either randomly or
 %       arbitrarly
-if(nargin < 6)
+if(nargin < 6) % IF there is no shift, shift = sx/4
     shift = round(Grid.sx/4);
 end
 if isa(def,'double') 
     if strcmp(type,'number')
-        nPulses = def;
+        nPulses = def; % number of emitters in camera
     elseif strcmp(type,'density')
         dPulses = def; % in [#/um.^2], then uncomment next line
         sample_area = Grid.sx*Grid.sy*(Cam.pixel_size/Optics.magnification).^2; % in [m^2] 
         sample_area = sample_area * (1e12); % in [um^2]
-        nPulses = round(dPulses * sample_area);
+        nPulses = round(dPulses * sample_area); 
     else
         error('wrong type, replace by either "number" or "density"');
     end
     
-    if nPulses == 2
+    if nPulses == 2 % two emitter
         %if(shift > round(Grid.sx/2)-1); shift=round(Grid.sx/2)-1;end;
         emitters_position = [round(Grid.sy/2),-shift + round(Grid.sx/2);round(Grid.sy/2),shift + round(Grid.sx/2)];
     else
