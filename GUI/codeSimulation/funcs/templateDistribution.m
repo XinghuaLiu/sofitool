@@ -278,8 +278,8 @@ elseif strcmp(genType, 'user defined')
 %         y = 2 + (Grid.sx - 3)*rand(nPulses,1);
 %     end
     sample_area = Grid.sx*Grid.sy*pixel_area; % in [um^2]
-    x = [2;5.654;12;20];
-    y = [20;10;8.213;7];
+    x = [2;5.654;12;20;25;20;15; ];
+    y = [20;10;8.213;7;25;20;15; ];
     nPulses = size(x,1);
     dPulses = nPulses/sample_area;
     clear sample_area;

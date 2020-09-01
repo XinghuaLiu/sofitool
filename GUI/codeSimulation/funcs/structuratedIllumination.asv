@@ -1,0 +1,14 @@
+function Ion = structuratedIllumination(position, Fluo,  Structed)
+% Simulated the sturctured illumination according to the 
+
+%Inputs:
+% Optics                parameters of the optical set-up and sample 
+% Cam                   parameters of the recording camera [struct]
+% Fluo                  parameters of the fluorophore and sample 
+%                       fluorescent properties [struct]
+x = position(1);
+
+kx = Structed.k*cos(Orient);
+ky = Structed.k*sin(Orient);
+Ion = 1/2*Fluo.Ion(1+cos(2*(kx*x+ky*y+Structed.Phase)));
+end

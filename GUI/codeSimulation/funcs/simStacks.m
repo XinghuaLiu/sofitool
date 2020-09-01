@@ -1,4 +1,4 @@
-function stacks=simStacks(frames,Optics,Cam,Fluo,Grid,intensity_peak_mode,tutorial)
+function stacks=simStacks(Optics,Cam,Fluo,Grid,Structed,intensity_peak_mode,tutorial)
 
 %Simulate the acquisition of an image sequence of blinking emitters.
 %
@@ -7,6 +7,7 @@ function stacks=simStacks(frames,Optics,Cam,Fluo,Grid,intensity_peak_mode,tutori
 % Optics                parameters of the optical set-up and sample 
 %                       distribution [struct]
 % Cam                   parameters of the recording camera [struct]
+% Structed              parameters of the structed illumination pattern [struct]
 % Fluo                  parameters of the fluorophore and sample 
 %                       fluorescent properties [struct]
 % Grid                  parameters of the sampling grid [struct]
@@ -44,14 +45,28 @@ function stacks=simStacks(frames,Optics,Cam,Fluo,Grid,intensity_peak_mode,tutori
 % along with SOFIsim.  If not, see <http://www.gnu.org/licenses/>.
 
 stacks =struct;
+frames = Optics.frames;
+% Initialed Structed illumination information
+
+
 
 % Generating Diffraction-Limited and Noisy Brightness Profiles
-[grid,stacks.analog]=simStacksCore(frames,Optics,Cam,Fluo,Grid,intensity_peak_mode,tutorial);
+%% Add Structed illumination pattern here
+grid = [];
+for i = 1 : Structed.n
+    Structed.Orient = pi*(i-1)/Structed.n;
+   for j = 1 : Structed.n
+       Structed.Phase = pi*(j-1)/Structed.n;
+       [grid_temp,stacks.analog]=simStacksCore(Optics,Cam,Fluo,Grid,Structed,intensity_peak_mode,tutorial);
+       grid = cat(3,grid,grid_temp);
+   end
+end
+
 %% ADD THERMAL NOISE and READOUT NOISE
 % Discretization: photoelectron conversion, electron multiplication,
 % readout and thermal noise
 fig = statusbar('Discretization...');
-for frame = 1:frames
+for frame = 1:frames*Structed.n*Structed.n
     stacks.discrete(:,:,frame) = uint16(gamrnd(grid(:,:,frame),Cam.quantum_gain) ...
         + Cam.readout_noise*(randn(Grid.sy,Grid.sx))...
         + Cam.thermal_noise*randn(Grid.sy,Grid.sx));

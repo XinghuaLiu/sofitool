@@ -1,4 +1,4 @@
-function [grid,analog]=simStacksCore(frames,Optics,Cam,Fluo,Grid,intensity_peak_mode,tutorial)
+function [grid,analog]=simStacksCore(Optics,Cam,Fluo,Grid,Structed,intensity_peak_mode,tutorial)
 %Simulate an image sequence of blinking emitters.
 %
 %Inputs:
@@ -44,6 +44,7 @@ function [grid,analog]=simStacksCore(frames,Optics,Cam,Fluo,Grid,intensity_peak_
 
 s_xy = Optics.fwhm_digital/2.3548;
 s_xy_analog = Grid.blckSize*s_xy;
+frames = Optics.frames;
 
 r = 3*s_xy;
 r_analog = Grid.blckSize*r;
@@ -51,12 +52,13 @@ r_analog = Grid.blckSize*r;
 emitter_position = Fluo.emitters; % x and y positions of each emitters
 Nemitters = size(emitter_position,1);
 emitter_brightness = zeros(size(emitter_position,1),frames);
-
 % Generating brightness
 fig = statusbar('Brightness...');
 for k=1:Nemitters
     fig = statusbar(k/Nemitters,fig);
-    emitter_brightness(k,:) = brightness(Fluo.Ion,Fluo.Ton,Fluo.Toff,Fluo.Tbl,frames);
+    position = emitter_position(k,:);
+    Ion = structuratedIllumination(position, Fluo, Structed);
+    emitter_brightness(k,:) = brightness(Ion,Fluo.Ton,Fluo.Toff,Fluo.Tbl,frames);
 end
 
 % Discrete Signal

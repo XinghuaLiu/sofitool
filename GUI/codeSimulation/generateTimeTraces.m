@@ -35,6 +35,10 @@ Optics = getappdata(hRoot,'Optics');
 Cam = getappdata(hRoot,'Cam');
 Grid = getappdata(hRoot,'Grid');
 Fluo = getappdata(hRoot,'Fluo');
+Structed = struct;
+
+Structed.n = 3;
+Structed.k = 2*pi./Optics.wavelength*Optics.NA/Optics.magnification*Cam.pixel_size;
 
 % check whether the simulation is based on the intensity peak and S/B 
 % or on the signal per frame and background
@@ -54,7 +58,7 @@ Fluo.Toff = Fluo.Toff * Cam.acq_speed;
 Fluo.Tbl = Fluo.Tbl * Cam.acq_speed;
 
 % time Traces of the digital signal recorded at the camera
-stacks = simStacks(Optics.frames,Optics,Cam,Fluo,Grid,intensity_peak_mode,tutorial);
+stacks = simStacks(Optics,Cam,Fluo,Grid,Structed,intensity_peak_mode,tutorial);
 
 if tutorial
     % normalize the analog time traces between 0 and 1
