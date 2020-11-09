@@ -52,13 +52,14 @@ r_analog = Grid.blckSize*r;
 emitter_position = Fluo.emitters; % x and y positions of each emitters
 Nemitters = size(emitter_position,1);
 emitter_brightness = zeros(size(emitter_position,1),frames);
+Ion = zeros(size(emitter_position,1),1);
 % Generating brightness
 fig = statusbar('Brightness...');
 for k=1:Nemitters
     fig = statusbar(k/Nemitters,fig);
     position = emitter_position(k,:);
-    Ion = structuratedIllumination(position, Fluo, Structed);
-    emitter_brightness(k,:) = brightness(Ion,Fluo.Ton,Fluo.Toff,Fluo.Tbl,frames);
+    Ion(k) = structuratedIllumination(position, Fluo, Structed);
+    emitter_brightness(k,:) = brightness(Ion(k),Fluo.Ton,Fluo.Toff,Fluo.Tbl,frames);
 end
 
 % Discrete Signal

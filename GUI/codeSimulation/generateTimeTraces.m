@@ -37,8 +37,9 @@ Grid = getappdata(hRoot,'Grid');
 Fluo = getappdata(hRoot,'Fluo');
 Structed = struct;
 
-Structed.n = 3;
-Structed.k = 2*pi./Optics.wavelength*Optics.NA/Optics.magnification*Cam.pixel_size;
+Structed.n = 5;
+tempk = 2*2*pi./Optics.wavelength*Optics.NA/Optics.magnification*Cam.pixel_size;
+Structed.k = 2*tempk;
 
 % check whether the simulation is based on the intensity peak and S/B 
 % or on the signal per frame and background

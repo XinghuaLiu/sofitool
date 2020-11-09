@@ -10,5 +10,5 @@ x = position(1);
 y = position(2);
 kx = Structed.k*cos(Structed.Orient);
 ky = Structed.k*sin(Structed.Orient);
-Ion = 1/2*Fluo.Ion*(1+cos(2*(kx*x+ky*y+Structed.Phase)));
+Ion = 1/2*Fluo.Ion*(1+cos((kx*x+ky*y+Structed.Phase)));
 end

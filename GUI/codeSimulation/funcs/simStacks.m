@@ -54,9 +54,11 @@ frames = Optics.frames;
 %% Add Structed illumination pattern here
 grid = [];
 for i = 1 : Structed.n
-    Structed.Orient = pi*(i-1)/Structed.n;
+    Structed.Orient = pi*(i-1)/Structed.n+pi/12;
    for j = 1 : Structed.n
-       Structed.Phase = pi*(j-1)/Structed.n;
+       kx = Structed.k*cos(Structed.Orient);
+       ky = Structed.k*sin(Structed.Orient);
+       Structed.Phase = 2*pi*(j-1)/Structed.n-kx*(Grid.sx*0.5+0.5)-ky*(Grid.sy*0.5+0.5);
        [grid_temp,stacks.analog]=simStacksCore(Optics,Cam,Fluo,Grid,Structed,intensity_peak_mode,tutorial);
        grid = cat(3,grid,grid_temp);
    end
