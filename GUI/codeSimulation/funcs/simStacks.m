@@ -1,4 +1,4 @@
-function stacks=simStacks(Optics,Cam,Fluo,Grid,Structed,intensity_peak_mode,tutorial)
+function stacks=simStacks(Optics,Cam,Fluo,Grid,intensity_peak_mode,tutorial)
 
 %Simulate the acquisition of an image sequence of blinking emitters.
 %
@@ -48,18 +48,19 @@ stacks =struct;
 frames = Optics.frames;
 % Initialed Structed illumination information
 
-
+global Structed
 
 % Generating Diffraction-Limited and Noisy Brightness Profiles
 %% Add Structed illumination pattern here
 grid = [];
+Structed.Orient = zeros(Structed.n,1);
 for i = 1 : Structed.n
-    Structed.Orient = pi*(i-1)/Structed.n+pi/12;
+    Structed.Orient(i) = pi*(i-1)/Structed.n+pi/12;
    for j = 1 : Structed.n
-       kx = Structed.k*cos(Structed.Orient);
-       ky = Structed.k*sin(Structed.Orient);
+       kx = Structed.k*cos(Structed.Orient(i));
+       ky = Structed.k*sin(Structed.Orient(i));
        Structed.Phase = 2*pi*(j-1)/Structed.n-kx*(Grid.sx*0.5+0.5)-ky*(Grid.sy*0.5+0.5);
-       [grid_temp,stacks.analog]=simStacksCore(Optics,Cam,Fluo,Grid,Structed,intensity_peak_mode,tutorial);
+       [grid_temp,stacks.analog]=simStacksCore(Optics,Cam,Fluo,Grid,Structed,intensity_peak_mode,tutorial,i);
        grid = cat(3,grid,grid_temp);
    end
 end

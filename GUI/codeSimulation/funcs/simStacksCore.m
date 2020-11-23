@@ -1,4 +1,4 @@
-function [grid,analog]=simStacksCore(Optics,Cam,Fluo,Grid,Structed,intensity_peak_mode,tutorial)
+function [grid,analog]=simStacksCore(Optics,Cam,Fluo,Grid,Structed,intensity_peak_mode,tutorial,i)
 %Simulate an image sequence of blinking emitters.
 %
 %Inputs:
@@ -58,7 +58,7 @@ fig = statusbar('Brightness...');
 for k=1:Nemitters
     fig = statusbar(k/Nemitters,fig);
     position = emitter_position(k,:);
-    Ion(k) = structuratedIllumination(position, Fluo, Structed);
+    Ion(k) = structuratedIllumination(position, Fluo, Structed,i);
     emitter_brightness(k,:) = brightness(Ion(k),Fluo.Ton,Fluo.Toff,Fluo.Tbl,frames);
 end
 

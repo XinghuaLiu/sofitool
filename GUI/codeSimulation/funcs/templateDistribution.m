@@ -1,4 +1,4 @@
-function [x,y,nPulses,dPulses,sizePattern] = templateDistribution(def,Grid,genType,pixel_area,offset)
+function [x,y,nPulses,dPulses,sizePattern] = templateDistribution(def,Grid,Optics,genType,pixel_area,offset)
 %Generates randomly localized emitters within a given spatial distribution
 %
 %Inputs:
@@ -278,8 +278,8 @@ elseif strcmp(genType, 'user defined')
 %         y = 2 + (Grid.sx - 3)*rand(nPulses,1);
 %     end
     sample_area = Grid.sx*Grid.sy*pixel_area; % in [um^2]
-
-    y = 2:1.5:Grid.sx-1;
+    rayleighlimit = Optics.fwhm_digital;
+    y = 5:rayleighlimit:Grid.sx-5;
     y = y.*ones(length(y));
     x = y';
     x = x(:);

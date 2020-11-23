@@ -70,10 +70,10 @@ end
 switch(genType)
     case 'random'
         Grid.template_size = 7;
-        [emitters_position(:,1),emitters_position(:,2),nPulses,dPulses]=templateDistribution(Pulses,Grid,'random',pixel_area,shift);
+        [emitters_position(:,1),emitters_position(:,2),nPulses,dPulses]=templateDistribution(Pulses,Grid,Optics,'random',pixel_area,shift);
     case 'circular'
         Grid.template_size = 7;
-        [emitters_position(:,1),emitters_position(:,2),nPulses,dPulses]=templateDistribution(Pulses,Grid,'circular',pixel_area);    
+        [emitters_position(:,1),emitters_position(:,2),nPulses,dPulses]=templateDistribution(Pulses,Grid,Optics,'circular',pixel_area);    
     case 'circular_patches'
         Grid.template_size = 7;
         % modify number of pulses according to number of patches
@@ -86,7 +86,7 @@ switch(genType)
         end
         % offset k=1, determine the number of pulses per patch and create
         % the first patch
-        [emitters_position_init(:,1),emitters_position_init(:,2),nPulses_init,dPulses_init]=templateDistribution(round(Pulses/nPatches),Grid,'circular',pixel_area,offset(1,:)); 
+        [emitters_position_init(:,1),emitters_position_init(:,2),nPulses_init,dPulses_init]=templateDistribution(round(Pulses/nPatches),Grid,Optics,'circular',pixel_area,offset(1,:)); 
         nPulses = nPulses_init*nPatches;
         dPulses = dPulses_init*nPatches;
         
@@ -97,11 +97,11 @@ switch(genType)
         
         % offset k=2:patches
         for k=2:nPatches
-            [emitters_position(1+(k-1)*nPulses/nPatches:(k*nPulses)/nPatches,1),emitters_position(1+(k-1)*nPulses/nPatches:(k*nPulses)/nPatches,2)]=templateDistribution(nPulses/nPatches,Grid,'circular',pixel_area,offset(k,:));
+            [emitters_position(1+(k-1)*nPulses/nPatches:(k*nPulses)/nPatches,1),emitters_position(1+(k-1)*nPulses/nPatches:(k*nPulses)/nPatches,2)]=templateDistribution(nPulses/nPatches,Grid,Optics,'circular',pixel_area,offset(k,:));
         end
      case 'annular'
         Grid.template_size = 7;
-        [emitters_position(:,1),emitters_position(:,2),nPulses,dPulses]=templateDistribution(Pulses,Grid,'annular',pixel_area);    
+        [emitters_position(:,1),emitters_position(:,2),nPulses,dPulses]=templateDistribution(Pulses,Grid,Optics,'annular',pixel_area);    
      case 'annular_patches'
         Grid.template_size = 7;
         % modify number of pulses according to number of patches
@@ -114,7 +114,7 @@ switch(genType)
         end
         % offset k=1, determine the number of pulses per patch and create
         % the first patch
-        [emitters_position_init(:,1),emitters_position_init(:,2),nPulses_init,dPulses]=templateDistribution(round(Pulses/nPatches),Grid,'annular',pixel_area,offset(1,:)); 
+        [emitters_position_init(:,1),emitters_position_init(:,2),nPulses_init,dPulses]=templateDistribution(round(Pulses/nPatches),Grid,Optics,'annular',pixel_area,offset(1,:)); 
         nPulses = nPulses_init*nPatches;
         %dPulses = dPulses_init*nPatches;
         
@@ -125,11 +125,11 @@ switch(genType)
         
         % offset k=2:patches
         for k=1:nPatches
-            [emitters_position(1+(k-1)*nPulses/nPatches:(k*nPulses)/nPatches,1),emitters_position(1+(k-1)*nPulses/nPatches:(k*nPulses)/nPatches,2)]=templateDistribution(nPulses/nPatches,Grid,'annular',pixel_area,offset(k,:));
+            [emitters_position(1+(k-1)*nPulses/nPatches:(k*nPulses)/nPatches,1),emitters_position(1+(k-1)*nPulses/nPatches:(k*nPulses)/nPatches,2)]=templateDistribution(nPulses/nPatches,Grid,Optics,'annular',pixel_area,offset(k,:));
         end
      case 'segment'
         Grid.template_size = 5;
-        [emitters_position(:,1),emitters_position(:,2),nPulses,dPulses]=templateDistribution(Pulses,Grid,'segment',pixel_area);    
+        [emitters_position(:,1),emitters_position(:,2),nPulses,dPulses]=templateDistribution(Pulses,Grid,Optics,'segment',pixel_area);    
      case 'segment_patches'
         Grid.template_size = 3; % must be greater than 3 at least
         % modify number of pulses according to number of patches
@@ -141,7 +141,7 @@ switch(genType)
         end
         % offset k=1, determine the number of pulses per patch and create
         % the first patch
-        [emitters_position_init(:,1),emitters_position_init(:,2),nPulses_init,dPulses]=templateDistribution(round(Pulses/nPatches),Grid,'segment',pixel_area,offset(1,:)); 
+        [emitters_position_init(:,1),emitters_position_init(:,2),nPulses_init,dPulses]=templateDistribution(round(Pulses/nPatches),Grid,Optics,'segment',pixel_area,offset(1,:)); 
         nPulses = nPulses_init*nPatches;
         %dPulses = dPulses_init*nPatches;
         
@@ -152,16 +152,16 @@ switch(genType)
         
         % offset k=2:patches
         for k=1:nPatches
-            [emitters_position(1+(k-1)*nPulses/nPatches:(k*nPulses)/nPatches,1),emitters_position(1+(k-1)*nPulses/nPatches:(k*nPulses)/nPatches,2)]=templateDistribution(nPulses/nPatches,Grid,'segment',pixel_area,offset(k,:));
+            [emitters_position(1+(k-1)*nPulses/nPatches:(k*nPulses)/nPatches,1),emitters_position(1+(k-1)*nPulses/nPatches:(k*nPulses)/nPatches,2)]=templateDistribution(nPulses/nPatches,Grid,Optics,'segment',pixel_area,offset(k,:));
         end 
     case 'siemens star'
         nCycles=shift;
         Grid.template_size=0.5;
         %rest = mod(Pulses,nPatches);if rest~=0 && Pulses>0;Pulses = Pulses - rest;end;
-        [emitters_position(:,1),emitters_position(:,2),nPulses,dPulses]=templateDistribution(Pulses,Grid,'siemens star',pixel_area,nCycles);
+        [emitters_position(:,1),emitters_position(:,2),nPulses,dPulses]=templateDistribution(Pulses,Grid,Optics,'siemens star',pixel_area,nCycles);
     case 'user defined'
         Grid.template_size=0.5;
-        [emitters_position(:,1),emitters_position(:,2),nPulses,dPulses,sizePattern]=templateDistribution(Pulses,Grid,'user defined',pixel_area);
+        [emitters_position(:,1),emitters_position(:,2),nPulses,dPulses,sizePattern]=templateDistribution(Pulses,Grid,Optics,'user defined',pixel_area);
         Grid.sy = sizePattern; Grid.sx = sizePattern;
     otherwise 
 end

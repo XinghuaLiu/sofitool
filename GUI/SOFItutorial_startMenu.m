@@ -1357,6 +1357,7 @@ if ~isempty(getappdata(hMainGui,'digital_timeTraces'))
     Fluo = getappdata(hMainGui,'Fluo');
     Cam = getappdata(hMainGui,'Cam');
     Grid = getappdata(hMainGui,'Grid');
+    global Structed
     stacks_discrete = getappdata(hMainGui,'digital_timeTraces');
     stacks_analog = getappdata(hMainGui,'analog_timeTraces');
     
@@ -1365,7 +1366,7 @@ if ~isempty(getappdata(hMainGui,'digital_timeTraces'))
     foldername = uigetdir(pwd,'Select folder');
     if ~isnumeric(foldername)
         filename = strcat(foldername,'\image_sequence.mat');clear foldername;
-        save(filename,'Optics','Fluo','Cam','Grid','stacks_discrete','stacks_analog','-v7.3')
+        save(filename,'Optics','Fluo','Cam','Grid','Structed','stacks_discrete','stacks_analog','-v7.3')
         %uisave({'Optics','Fluo','Cam','Grid','stacks_discrete','stacks_analog'},'image_sequence');
         clear Optics Fluo Cam Grid stacks_discrete stacks_analog;
     end
